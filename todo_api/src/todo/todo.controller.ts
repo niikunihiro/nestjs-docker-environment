@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { NowProvider } from 'src/date/now.provider';
 import { Todo } from 'src/entity/todo.entity';
 import { InsertResult } from 'typeorm';
@@ -15,6 +15,11 @@ export class TodoController {
   @Get()
   getTodos(): Promise<Todo[]> {
     return this.todoService.getTodos();
+  }
+
+  @Get(':id')
+  async getTodo(@Param('id') id: number): Promise<Todo> {
+    return this.todoService.getTodo(id);
   }
 
   @Post()

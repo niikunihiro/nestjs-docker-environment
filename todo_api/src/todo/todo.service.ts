@@ -9,7 +9,10 @@ export class TodoService {
     return getRepository(Todo).find();
   }
 
-  addTodo(todo: CreateTodoDto) {
+  getTodo(id: number): Promise<Todo> {
+    return getRepository(Todo).findOne(id);
+  }
+
   addTodo(todo: CreateTodoDto): Promise<InsertResult> {
     return getRepository(Todo).insert(todo);
   }
