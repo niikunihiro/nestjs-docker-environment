@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { NowProvider } from 'src/date/now.provider';
 import { Todo } from 'src/entity/todo.entity';
-import { InsertResult } from 'typeorm';
+import { InsertResult, UpdateResult } from 'typeorm';
 import { CreateTodoDto } from './dto/create-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoService } from './todo.service';
 
 @Controller('todo')
@@ -28,5 +29,14 @@ export class TodoController {
     todo.created_at = now;
     todo.updated_at = now;
     return this.todoService.addTodo(todo);
+  }
+
+  @Put(':id')
+  async updateTodo(
+    @Param('id') id: number,
+    @Body() todo: UpdateTodoDto,
+  ): Promise<UpdateResult> {
+    todo.updated_at = this.now.getNowString();
+    return this.todoService.updateTodo(id, todo);
   }
 }
