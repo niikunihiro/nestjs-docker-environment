@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  sakenomidb:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: sakenomi_db
+    restart: always
+    ports:
+      - 3306:3306
+    env_file:
+      - ./mysql/.env
+    volumes:
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d
+  todoapi:
+    build: nestjs
+    container_name: todo_api
+    ports:
+      - 3000:3000
+    env_file:
+      - ./mysql/.env
+    working_dir: /app
+    volumes:
+      - ../todo_api:/app:cached
+    tty: true
+    # command:
+    #   -
