@@ -1,4 +1,4 @@
-CREATE DATABASE `todo_app` CHARSET utf8mb4 COLLATE utf8mb4_bin;
+CREATE DATABASE IF NOT EXISTS `todo_app` CHARSET utf8mb4 COLLATE utf8mb4_bin;
 
 USE `todo_app`;
 
