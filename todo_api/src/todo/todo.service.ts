@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Todo } from 'src/entity/todo.entity';
-import { getRepository, InsertResult, UpdateResult } from 'typeorm';
+import {
+  DeleteResult,
+  getRepository,
+  InsertResult,
+  UpdateResult,
+} from 'typeorm';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 
@@ -20,5 +25,9 @@ export class TodoService {
 
   updateTodo(id: number, todo: UpdateTodoDto): Promise<UpdateResult> {
     return getRepository(Todo).update(id, todo);
+  }
+
+  deleteTodo(id: number): Promise<DeleteResult> {
+    return getRepository(Todo).delete(id);
   }
 }
