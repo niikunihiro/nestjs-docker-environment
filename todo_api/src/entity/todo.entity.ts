@@ -5,7 +5,7 @@ export class Todo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar')
+  @Column({ length: 100 })
   title: string;
 
   @Column('text')
