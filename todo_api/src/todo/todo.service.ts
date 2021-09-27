@@ -28,7 +28,7 @@ export class TodoService {
     await queryRunner.startTransaction();
     let insertedTodo = new Todo();
     try {
-      const newTodo = await queryRunner.manager.create(Todo, todo);
+      const newTodo = queryRunner.manager.create(Todo, todo);
       insertedTodo = await queryRunner.manager.save(newTodo);
       await queryRunner.commitTransaction();
       return insertedTodo;
