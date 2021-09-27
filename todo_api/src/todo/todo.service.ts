@@ -4,7 +4,7 @@ import {
   Connection,
   DeleteResult,
   getRepository,
-  InsertResult,
+  QueryRunner,
   UpdateResult,
 } from 'typeorm';
 import { CreateTodoDto } from './dto/create-todo.dto';
@@ -58,7 +58,20 @@ export class TodoService {
     }
   }
 
-  deleteTodo(id: number): Promise<DeleteResult> {
-    return getRepository(Todo).delete(id);
+  async deleteTodo(id: number): Promise<DeleteResult> {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const result = await queryRunner.manager.delete(Todo, id);
+      await queryRunner.commitTransaction();
+      return result;
+    } catch (error) {
+      console.error(error);
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException();
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

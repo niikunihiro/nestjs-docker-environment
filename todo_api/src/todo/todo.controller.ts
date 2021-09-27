@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { NowProvider } from 'src/date/now.provider';
 import { Todo } from 'src/entity/todo.entity';
-import { DeleteResult } from 'typeorm';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoService } from './todo.service';
@@ -56,7 +55,11 @@ export class TodoController {
   }
 
   @Delete(':id')
-  async deleteTodo(@Param('id') id: number): Promise<DeleteResult> {
-    return this.todoService.deleteTodo(id);
+  @HttpCode(204)
+  async deleteTodo(@Param('id') id: number): Promise<void> {
+    const deleteResult = await this.todoService.deleteTodo(id);
+    if (deleteResult.affected === 0) {
+      throw new NotFoundException();
+    }
   }
 }
