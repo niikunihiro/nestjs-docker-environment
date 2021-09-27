@@ -3,13 +3,17 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  NotFoundException,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
+import { resourceUsage } from 'process';
 import { NowProvider } from 'src/date/now.provider';
 import { Todo } from 'src/entity/todo.entity';
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
+import { resourceLimits } from 'worker_threads';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoService } from './todo.service';
@@ -40,12 +44,16 @@ export class TodoController {
   }
 
   @Put(':id')
+  @HttpCode(204)
   async updateTodo(
     @Param('id') id: number,
     @Body() todo: UpdateTodoDto,
-  ): Promise<UpdateResult> {
+  ): Promise<void> {
     todo.updated_at = this.now.getNowString();
-    return this.todoService.updateTodo(id, todo);
+    const updateResult = await this.todoService.updateTodo(id, todo);
+    if (updateResult.affected === 0) {
+      throw new NotFoundException();
+    }
   }
 
   @Delete(':id')
