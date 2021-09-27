@@ -9,11 +9,9 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { resourceUsage } from 'process';
 import { NowProvider } from 'src/date/now.provider';
 import { Todo } from 'src/entity/todo.entity';
-import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
-import { resourceLimits } from 'worker_threads';
+import { DeleteResult } from 'typeorm';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoService } from './todo.service';
@@ -36,7 +34,8 @@ export class TodoController {
   }
 
   @Post()
-  async addTodo(@Body() todo: CreateTodoDto): Promise<InsertResult> {
+  @HttpCode(201)
+  async addTodo(@Body() todo: CreateTodoDto): Promise<Todo> {
     const now = this.now.getNowString();
     todo.created_at = now;
     todo.updated_at = now;

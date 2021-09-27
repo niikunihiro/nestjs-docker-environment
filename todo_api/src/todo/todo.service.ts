@@ -22,8 +22,23 @@ export class TodoService {
     return getRepository(Todo).findOne(id);
   }
 
-  addTodo(todo: CreateTodoDto): Promise<InsertResult> {
-    return getRepository(Todo).insert(todo);
+  async addTodo(todo: CreateTodoDto): Promise<Todo> {
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    let insertedTodo = new Todo();
+    try {
+      const newTodo = await queryRunner.manager.create(Todo, todo);
+      insertedTodo = await queryRunner.manager.save(newTodo);
+      await queryRunner.commitTransaction();
+      return insertedTodo;
+    } catch (error) {
+      console.error(error);
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException();
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async updateTodo(id: number, todo: UpdateTodoDto): Promise<UpdateResult> {
