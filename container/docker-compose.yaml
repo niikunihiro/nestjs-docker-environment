@@ -25,3 +25,14 @@ services:
     tty: true
     # command:
     #   -
+  todoapp:
+    build: vuejs
+    container_name: climax_app
+    ports:
+      - 8080:8080
+    working_dir: /app
+    volumes:
+      - ../todo_app:/app:cache
+    tty: true
+    stdin_open: true
+    privileged: true
