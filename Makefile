@@ -1,9 +1,13 @@
 init-db:
 	cp ./container/mysql/mysql.env ./container/mysql/.env
-run-dc:
+dc-up:
 	cd container && docker-compose up -d
+dc-down:
+	cd container && docker-compose down
+dc-stop:
+	cd container && docker-compose stop
 dc-log:
-	docker-compose logs
+	cd container && docker-compose logs -f
 attach-api:
 	docker exec -it todo_api sh
 attach-vue:
