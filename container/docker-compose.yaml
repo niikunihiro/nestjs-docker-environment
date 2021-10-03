@@ -23,8 +23,7 @@ services:
     volumes:
       - ../todo_api:/app:cached
     tty: true
-    # command:
-    #   -
+    command: ['yarn', 'start']
   todoapp:
     build: vuejs
     container_name: climax_app
