@@ -1,5 +1,5 @@
 init-db:
-	cp ./container/mysql/mysql.env ./container/mysql/.env
+	cp ./container/mysql/mysql.env ./container/mysql/.env && vi ./container/mysql/.env
 dc-up:
 	cd container && docker-compose up -d
 dc-down:
