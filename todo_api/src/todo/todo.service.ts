@@ -1,25 +1,24 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import {
-  Connection,
-  DeleteResult,
-  getRepository,
-  QueryRunner,
-  UpdateResult,
-} from 'typeorm';
 import { Todo } from '../entity/todo.entity';
+import { Connection, DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TodoService {
-  constructor(private readonly connection: Connection) {}
+  constructor(
+    @InjectRepository(Todo)
+    private todoRepository: Repository<Todo>,
+    private readonly connection: Connection,
+  ) {}
 
   getTodos(): Promise<Todo[]> {
-    return getRepository(Todo).find();
+    return this.todoRepository.find();
   }
 
   getTodo(id: number): Promise<Todo> {
-    return getRepository(Todo).findOne(id);
+    return this.todoRepository.findOne(id);
   }
 
   async addTodo(todo: CreateTodoDto): Promise<Todo> {
