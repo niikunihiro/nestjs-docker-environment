@@ -1,5 +1,4 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Todo } from 'src/entity/todo.entity';
 import {
   Connection,
   DeleteResult,
@@ -7,6 +6,7 @@ import {
   QueryRunner,
   UpdateResult,
 } from 'typeorm';
+import { Todo } from '../entity/todo.entity';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 

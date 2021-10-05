@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NowProvider } from 'src/date/now.provider';
+import { NowProvider } from '../date/now.provider';
 import { TodoController } from './todo.controller';
 import { TodoService } from './todo.service';
 

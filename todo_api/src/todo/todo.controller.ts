@@ -9,8 +9,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { NowProvider } from 'src/date/now.provider';
-import { Todo } from 'src/entity/todo.entity';
+import { NowProvider } from '../date/now.provider';
+import { Todo } from '../entity/todo.entity';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoService } from './todo.service';
