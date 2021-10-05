@@ -31,7 +31,7 @@ services:
       - 8080:8080
     working_dir: /app
     volumes:
-      - ../todo_app:/app:cache
+      - ../todo_app:/app:cached
     tty: true
     stdin_open: true
     privileged: true
