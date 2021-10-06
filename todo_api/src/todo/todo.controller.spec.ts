@@ -1,24 +1,44 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Todo } from '../entity/todo.entity';
+import { NowProvider } from '../date/now.provider';
 import { TodoController } from './todo.controller';
+import { TodoService } from './todo.service';
+
+jest.mock('./todo.service');
 
 describe('TodoController', () => {
-  let controller: TodoController;
+  let todoController: TodoController;
+  let todoService: TodoService;
 
-  /*
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [TodoController],
-    }).compile();
+    const TodoServiceMock = TodoService as jest.Mock;
+    todoService = new TodoServiceMock();
+    todoController = new TodoController(todoService, new NowProvider());
+  });
 
-    controller = module.get<TodoController>(TodoController);
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(todoController).toBeDefined();
   });
-  */
 
-  it('should be true', () => {
-    expect(true).toBeTruthy();
+  describe('/todo', () => {
+    it('should return some todos', () => {
+      jest.spyOn(todoService, 'getTodos').mockImplementation(async () => {
+        const todo: Todo = {
+          id: 1,
+          title: 'hello my first todo',
+          content: 'this is mock',
+          created_at: '2021-10-05T15:28:58.000Z',
+          updated_at: '2021-10-05T15:28:58.000Z',
+        };
+        return [todo, todo];
+      });
+
+      todoController.getTodos().then((todos) => {
+        expect(todos).toHaveLength(2);
+      });
+    });
   });
 });
