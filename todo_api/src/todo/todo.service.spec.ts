@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Todo } from '../entity/todo.entity';
 import { Connection } from 'typeorm';
-import { NowProvider } from '../date/now.provider';
 import { TodoService } from './todo.service';
 
 describe('TodoService', () => {
@@ -31,7 +30,6 @@ describe('TodoService', () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
         TodoService,
-        NowProvider,
         {
           provide: getRepositoryToken(Todo),
           useValue: {
