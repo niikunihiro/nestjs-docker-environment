@@ -9,9 +9,9 @@ describe('TodoController', () => {
   let todoController: TodoController;
   let todoService: TodoService;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     const TodoServiceMock = TodoService as jest.Mock;
-    todoService = new TodoServiceMock();
+    todoService = new TodoServiceMock() as TodoService;
     todoController = new TodoController(todoService, new NowProvider());
   });
 
@@ -25,7 +25,7 @@ describe('TodoController', () => {
 
   describe('/todo', () => {
     it('should return some todos', () => {
-      jest.spyOn(todoService, 'getTodos').mockImplementation(async () => {
+      jest.spyOn(todoService, 'getTodos').mockImplementation(() => {
         const todo: Todo = {
           id: 1,
           title: 'hello my first todo',
@@ -33,12 +33,10 @@ describe('TodoController', () => {
           created_at: '2021-10-05T15:28:58.000Z',
           updated_at: '2021-10-05T15:28:58.000Z',
         };
-        return [todo, todo];
+        return Promise.resolve([todo, todo]);
       });
 
-      todoController.getTodos().then((todos) => {
-        expect(todos).toHaveLength(2);
-      });
+      void expect(todoController.getTodos()).resolves.toHaveLength(2);
     });
   });
 });

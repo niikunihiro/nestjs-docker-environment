@@ -6,7 +6,6 @@ import { TodoService } from './todo.service';
 
 describe('TodoService', () => {
   let service: TodoService;
-  let connection;
   const mockConnection = () => ({
     transaction: jest.fn(),
   });
@@ -19,7 +18,7 @@ describe('TodoService', () => {
     updated_at: '2021-10-05T15:28:58.000Z',
   };
 
-  let mockTodos = [
+  const mockTodos = [
     mockTodo,
     { ...mockTodo, id: 2 },
     { ...mockTodo, id: 3 },
@@ -43,8 +42,7 @@ describe('TodoService', () => {
       ],
     }).compile();
 
-    service = await moduleRef.get<TodoService>(TodoService);
-    connection = await moduleRef.get<Connection>(Connection);
+    service = moduleRef.get<TodoService>(TodoService);
   });
 
   it('should be defined', () => {
