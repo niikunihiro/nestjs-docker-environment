@@ -1,6 +1,6 @@
 {
   "singleQuote": true,
   "trailingComma": "all",
-  "no-extra-semi": "error",
-  "no-unexpected-multiline": "error"
+  "semi": true,
+  "endOfLine": "lf"
 }
