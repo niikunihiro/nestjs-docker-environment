@@ -10,8 +10,8 @@ describe('TodoController', () => {
   let todoService: TodoService;
 
   beforeEach(() => {
-    const TodoServiceMock = TodoService as jest.Mock;
-    todoService = new TodoServiceMock() as TodoService;
+    const todoServiceMock = TodoService as jest.Mock;
+    todoService = new todoServiceMock() as TodoService;
     todoController = new TodoController(todoService, new NowProvider());
   });
 
