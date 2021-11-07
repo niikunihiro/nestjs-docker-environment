@@ -29,7 +29,11 @@ export class TodoController {
 
   @Get(':id')
   async getTodo(@Param('id') id: number): Promise<Todo> {
-    return this.todoService.getTodo(id);
+    const todo = await this.todoService.getTodo(id);
+    if (todo instanceof Todo) {
+      return todo;
+    }
+    throw new NotFoundException();
   }
 
   @Post()

@@ -57,6 +57,28 @@ describe('AppController (e2e)', () => {
         expect(todoGetResponse.title).toEqual(body.title);
       });
     });
+
+    describe('Read API of Todo', () => {
+      /* 
+      // これは再実行時には失敗するので隠しとく
+      it('OK /todo (GET)', async () => {
+        const todoResponse = await getTodoAll();
+        expect(todoResponse.length).toEqual(3);
+      });
+       */
+      it('OK /todo/:id (GET)', async () => {
+        const todoResponse = await getTodoAll();
+        const res = await request(app.getHttpServer()).get(
+          `/todo/${todoResponse[0].id}`,
+        );
+        expect(res.status).toEqual(200);
+      });
+
+      it('NG /todo/:id (GET): Invalid id', async () => {
+        const res = await request(app.getHttpServer()).get(`/todo/0`);
+        expect(res.status).toEqual(404);
+      });
+    });
   });
 
   afterEach(async () => {
