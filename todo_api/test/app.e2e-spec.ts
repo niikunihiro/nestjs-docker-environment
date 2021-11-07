@@ -4,13 +4,27 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { CreateTodoDto } from 'src/todo/dto/create-todo.dto';
 import { Todo } from 'src/entity/todo.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        TypeOrmModule.forRoot({
+          type: 'mysql',
+          host: process.env.MYSQL_HOST,
+          port: parseInt(process.env.MYSQL_PORT, 10),
+          username: process.env.MYSQL_USER,
+          password: process.env.MYSQL_PASSWORD,
+          database: process.env.MYSQL_DATABASE,
+          autoLoadEntities: true,
+          synchronize: false,
+          logging: false,
+        }),
+        AppModule,
+      ],
     }).compile();
 
     app = moduleFixture.createNestApplication();
