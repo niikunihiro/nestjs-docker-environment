@@ -5,6 +5,7 @@ import { AppModule } from './../src/app.module';
 import { CreateTodoDto } from 'src/todo/dto/create-todo.dto';
 import { Todo } from 'src/entity/todo.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -12,16 +13,21 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot({
-          type: 'mysql',
-          host: process.env.MYSQL_HOST,
-          port: parseInt(process.env.MYSQL_PORT, 10),
-          username: process.env.MYSQL_USER,
-          password: process.env.MYSQL_PASSWORD,
-          database: process.env.MYSQL_DATABASE,
-          autoLoadEntities: true,
-          synchronize: false,
-          logging: false,
+        ConfigModule.forRoot({ envFilePath: '.env.test' }),
+        TypeOrmModule.forRootAsync({
+          imports: [ConfigModule],
+          useFactory: (configService: ConfigService) => ({
+            type: 'mysql',
+            host: configService.get('MYSQL_HOST'),
+            port: configService.get<number>('MYSQL_PORT'),
+            username: configService.get('MYSQL_USER'),
+            password: configService.get('MYSQL_PASSWORD'),
+            database: configService.get('MYSQL_DATABASE'),
+            autoLoadEntities: true,
+            synchronize: false,
+            logging: false,
+          }),
+          inject: [ConfigService],
         }),
         AppModule,
       ],
@@ -29,6 +35,15 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+  });
+
+  describe('AppController (e2e)', () => {
+    describe('Read API of App', () => {
+      it('/ (GET)', async () => {
+        const res = await request(app.getHttpServer()).get('/');
+        expect(res.status).toEqual(200);
+      });
+    });
   });
 
   // 全件取得のための関数
